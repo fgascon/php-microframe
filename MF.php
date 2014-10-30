@@ -15,7 +15,9 @@ class MF
             $config = $appPath.'/config.php';
         if(is_string($config))
             $config = require($config);
-        $app = new MFApp();
+        $app = new MFApp($config);
+        self::$app = $app;
+        return $app;
     }
     
     public static function createApp($config)
