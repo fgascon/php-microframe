@@ -5,13 +5,11 @@ class MF
     
     private static $app = null;
     
-    public static function createApp($config)
+    public static function setApp($app)
     {
         if(self::$app)
-            throw new Exception("The app is already created.");
-        $app = new MFApp($config);
+            throw new Exception("The app is already loaded.");
         self::$app = $app;
-        return $app;
     }
     
     public static function app()

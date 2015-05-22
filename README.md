@@ -10,11 +10,9 @@ Micro PHP M[V]C Framework
 ```php
 <?php
 
-$appPath = dirname(__FILE__);
+$appPath = dirname(__FILE__).'/app';
 
-require_once $appPath.'/microframe/MF.php';
-
-MF::init($appPath);
+require_once(dirname(__FILE__).'/microframe/load_web.php');
 
 ```
 
@@ -24,6 +22,9 @@ MF::init($appPath);
 <?php
 
 return array(
+	'url'=>array(
+	
+	),
 	'databases'=>array(
 		'default'=>array(
 			'host'=>'127.0.0.1',
@@ -41,10 +42,10 @@ return array(
 ```php
 <?php
 
-class MainController extends MFController
+class MainController extends MFJsonController
 {
 	
-	public function index()
+	public function actionIndex()
 	{
 		return array(
 			'name'=>"My App",

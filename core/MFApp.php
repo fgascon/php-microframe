@@ -3,42 +3,18 @@
 class MFApp
 {
     
-    private $_config;
-    private $_controller;
-    private $_httpRequest;
-    private $_urlManager;
+    protected $_config;
     private $_databases = array();
     
     public function __construct($config)
     {
+        MF::setApp($this);
         $this->initSystemHandlers();
         if(is_string($config))
             $config = require($config);
         if(!is_array($config))
             throw new Exception("Config missing");
         $this->_config = $config;
-    }
-    
-    public function getController()
-    {
-        return $this->_controller;
-    }
-    
-    public function getHttpRequest()
-    {
-        if(!$this->_httpRequest)
-            $this->_httpRequest = new MFHttpRequest();
-        return $this->_httpRequest;
-    }
-    
-    public function getUrlManager()
-    {
-        if(!$this->_urlManager)
-        {
-            $config = $this->_config;
-            $this->_urlManager = new MFUrlManager(isset($config['url']) ? $config['url'] : array());
-        }
-        return $this->_urlManager;
     }
     
     public function getDatabase($name='default')
@@ -67,56 +43,6 @@ class MFApp
     
     public function run()
     {
-        $route = $this->getUrlManager()->detectRoute($this->getHttpRequest());
-        $this->runController($route);
-    }
-    
-    public function runController($route)
-    {
-        if(($ca = $this->createController($route)) !== null)
-        {
-            list($controller , $actionID) = $ca;
-            $oldController = $this->_controller;
-            $this->_controller = $controller;
-            //$controller->init();
-            $controller->run($actionID);
-            $this->_controller = $oldController;
-        }
-        else
-            throw new MFHttpException(404, MF::t('core','Unable to resolve the request "{route}".',
-                array('{route}'=>$route)));
-    }
-    
-    public function createController($route)
-    {
-        $routeParts = explode('/', $route);
-        $partsCount = count($routeParts);
-        $controllerID = null;
-        $actionID = 'index';
-        if($partsCount === 1)
-        {
-            $controllerID = $routeParts[0];
-        }
-        else if($partsCount === 2)
-        {
-            $controllerID = $routeParts[0];
-            $actionID = $routeParts[1];
-        }
-        else
-        {
-            return null;
-        }
-        if(!$controllerID)
-            return null;
-        
-        $className = ucfirst($controllerID).'Controller';
-        
-        $controller = new $className($controllerID);
-        if($controller instanceof MFController)
-        {
-            return array($controller, $actionID);
-        }
-        return null;
     }
     
     public function handleException($exception)
@@ -135,7 +61,7 @@ class MFApp
         if(isset($_SERVER['HTTP_REFERER']))
             $message .= "\nHTTP_REFERER=".$_SERVER['HTTP_REFERER'];
         $message .= "\n---";
-        //Yii::log($message,CLogger::LEVEL_ERROR,$category);
+        //MF::log($message,CLogger::LEVEL_ERROR,$category);
         
         try
         {
@@ -197,7 +123,7 @@ class MFApp
             }
             if(isset($_SERVER['REQUEST_URI']))
                 $log .= 'REQUEST_URI='.$_SERVER['REQUEST_URI'];
-            //Yii::log($log,CLogger::LEVEL_ERROR,'php');
+            //MF::log($log,CLogger::LEVEL_ERROR,'php');
             
             try
             {
@@ -231,13 +157,20 @@ class MFApp
         }
     }
     
+    protected function initSystemHandlers()
+    {
+        if(MF_ENABLE_EXCEPTION_HANDLER)
+            set_exception_handler(array($this, 'handleException'));
+        if(MF_ENABLE_ERROR_HANDLER)
+            set_error_handler(array($this, 'handleError'), error_reporting());
+    }
+    
     public function displayError($code, $message, $file, $line)
     {
         if(MF_DEBUG)
         {
-            echo "<h1>PHP Error [$code]</h1>\n";
-            echo "<p>$message ($file:$line)</p>\n";
-            echo '<pre>';
+            echo "PHP Error [$code]\n";
+            echo "$message ($file:$line)\n";
             
             $trace = debug_backtrace();
             // skip the first 3 stacks as they do not tell the error position
@@ -256,13 +189,11 @@ class MFApp
                     echo get_class($t['object']).'->';
                 echo "{$t['function']}()\n";
             }
-            
-            echo '</pre>';
         }
         else
         {
-            echo "<h1>PHP Error [$code]</h1>\n";
-            echo "<p>$message</p>\n";
+            echo "PHP Error [$code]\n";
+            echo "$message\n";
         }
     }
     
@@ -270,22 +201,14 @@ class MFApp
     {
         if(MF_DEBUG)
         {
-            echo '<h1>'.get_class($exception)."</h1>\n";
-            echo '<p>'.$exception->getMessage().' ('.$exception->getFile().':'.$exception->getLine().')</p>';
-            echo '<pre>'.$exception->getTraceAsString().'</pre>';
+            echo get_class($exception)."\n";
+            echo $exception->getMessage().' ('.$exception->getFile().':'.$exception->getLine().")\n";
+            echo $exception->getTraceAsString();
         }
         else
         {
-            echo '<h1>'.get_class($exception)."</h1>\n";
-            echo '<p>'.$exception->getMessage().'</p>';
+            echo get_class($exception)."\n";
+            echo $exception->getMessage()."\n";
         }
-    }
-    
-    protected function initSystemHandlers()
-    {
-        if(MF_ENABLE_EXCEPTION_HANDLER)
-            set_exception_handler(array($this, 'handleException'));
-        if(MF_ENABLE_ERROR_HANDLER)
-            set_error_handler(array($this, 'handleError'), error_reporting());
     }
 }
