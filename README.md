@@ -23,7 +23,7 @@ require_once(dirname(__FILE__).'/microframe/load_web.php');
 
 return array(
 	'url'=>array(
-	
+		''=>'main/index',
 	),
 	'databases'=>array(
 		'default'=>array(
