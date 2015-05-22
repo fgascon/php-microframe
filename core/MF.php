@@ -20,4 +20,9 @@ class MF
             throw new Exception("The app is not created yet.");
         return self::$app;
     }
+    
+    public static function t($category, $message, $params=array())
+    {
+        return str_replace(array_keys($params), array_values($params), $message);
+    }
 }
