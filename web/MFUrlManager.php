@@ -10,7 +10,7 @@ class MFUrlManager
         $this->_urlMap = $urlMap;
     }
     
-    public function detectRoute($request)
+    public function detectRoute(MFHttpRequest $request)
     {
         $pathInfo = '/'.$request->getPathInfo();
         if(isset($this->_urlMap[$pathInfo]))

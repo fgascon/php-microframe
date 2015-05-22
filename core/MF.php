@@ -23,4 +23,15 @@ class MF
     {
         return str_replace(array_keys($params), array_values($params), $message);
     }
+    
+    public static function trace($msg, $category='application')
+    {
+        
+    }
+    
+	public static function log($msg, $level='info', $category='application')
+	{
+		
+	}
+    
 }

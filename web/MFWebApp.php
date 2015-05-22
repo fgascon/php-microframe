@@ -24,7 +24,7 @@ class MFWebApp extends MFApp
         if(!$this->_urlManager)
         {
             $config = $this->_config;
-            $this->_urlManager = new MFUrlManager(isset($config['url']) ? $config['url'] : array());
+            $this->_urlManager = new MFUrlManager(isset($config['urls']) ? $config['urls'] : array());
         }
         return $this->_urlManager;
     }

@@ -4,7 +4,8 @@ class MFApp
 {
     
     protected $_config;
-    private $_databases = array();
+    private $_databases;
+    private $_components;
     
     public function __construct($config)
     {
@@ -17,28 +18,39 @@ class MFApp
         $this->_config = $config;
     }
     
+    public function getComponent($name)
+    {
+        if(isset($this->_components[$name]))
+            return $this->_components[$name];
+        if(!isset($this->_config['components'][$name]))
+            throw new Exception(MF::t('core', 'No component named "{name}".', array(
+                '{name}'=>$name,
+            )));
+        $config = $this->_config['components'][$name];
+        if(!isset($config['class']))
+            throw new Exception(MF::t('core', 'Component "{name} has no class defined".', array(
+                '{name}'=>$name,
+            )));
+        $className = $config['class'];
+        unset($config['class']);
+        $instance = new $className($config);
+        $this->_components[$name] = $instance;
+        return $instance;
+    }
+    
+    public function getDatabases()
+    {
+        if(!$this->_databases)
+        {
+            $config = $this->_config;
+            $this->_databases = new MFDbConnectionCollection(isset($config['databases']) ? $config['databases'] : array());
+        }
+        return $this->_databases;
+    }
+    
     public function getDatabase($name='default')
     {
-        if(isset($this->_databases[$name]))
-            return $this->_databases[$name];
-        else
-            throw new Exception("No database named '$name' configured");
-    }
-    
-    public function setDatabase($config)
-    {
-        $this->setDatabases(array(
-            'default'=>$config,
-        ));
-    }
-    
-    public function setDatabases($databasesConfig)
-    {
-        $databases = array();
-        foreach($databasesConfig as $name=>$config)
-        {
-            $databases[$name] = new MFDatabase($config);
-        }
+        return $this->getDatabases()->getConnection($name);
     }
     
     public function run()

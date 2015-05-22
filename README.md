@@ -22,15 +22,14 @@ require_once(dirname(__FILE__).'/microframe/load_web.php');
 <?php
 
 return array(
-	'url'=>array(
-		''=>'main/index',
+	'urls'=>array(
+		'/'=>'main/index',
 	),
 	'databases'=>array(
 		'default'=>array(
-			'host'=>'127.0.0.1',
+			'dsn'=>'mysql:unix_socket=/var/lib/mysql/mysql.sock;dbname=defaultdb',
 			'username'=>'myuser',
 			'password'=>'mypassword',
-			'dbname'=>'defaultdb',
 		),
 	),
 );

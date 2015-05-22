@@ -12,6 +12,7 @@ MFAutoloader::import(array(
     MF_PATH.'/i18n',
     MF_PATH.'/web',
     MF_PATH.'/db',
+    MF_PATH.'/db/schema',
     APP_PATH.'/controllers',
     APP_PATH.'/models',
 ));

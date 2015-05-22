@@ -1,6 +1,6 @@
 <?php
 
-class MFJsonController extends MFController
+abstract class MFJsonController extends MFController
 {
     
     protected function processOutput($output)
