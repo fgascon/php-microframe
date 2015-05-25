@@ -1,41 +1,88 @@
 <?php
 
-class MFApp
+class MFApp extends MFComponent
 {
     
     protected $_config;
-    private $_databases;
-    private $_components;
+    protected $_databases;
+    protected $_servicesConfig;
+    protected $_services = array();
     
     public function __construct($config)
     {
         MF::setApp($this);
         $this->initSystemHandlers();
+        
         if(is_string($config))
             $config = require($config);
         if(!is_array($config))
             throw new Exception("Config missing");
+        
+        $this->_servicesConfig = isset($config['services']) ? $config['services'] : array();
+        if(!isset($this->_servicesConfig['user']))
+        $this->_servicesConfig = MFArrayUtil::merge(array(
+            'redis'=>array(
+                'class'=>'MFRedisConnection',
+            ),
+            'states'=>array(
+                'class'=>'MFStateManager',
+            ),
+            'security'=>array(
+                'class'=>'MFSecurity',
+            ),
+        ), $this->_servicesConfig);
+        
+        unset($config['services']);
         $this->_config = $config;
+        if(isset($config['include']))
+        {
+            MFAutoloader::import(array_map(function($path){
+                return $path[0] === '/' ? $path : APP_PATH.'/'.$path;
+            }, $config['include']));
+        }
     }
     
-    public function getComponent($name)
+    public function __get($name)
     {
-        if(isset($this->_components[$name]))
-            return $this->_components[$name];
-        if(!isset($this->_config['components'][$name]))
-            throw new Exception(MF::t('core', 'No component named "{name}".', array(
+        if(isset($this->_services[$name]) || isset($this->_servicesConfig[$name]))
+            return $this->getService($name);
+        else
+            return parent::__get($name);
+    }
+    
+    public function getService($name)
+    {
+        if(isset($this->_services[$name]))
+            return $this->_services[$name];
+        if(!isset($this->_servicesConfig[$name]))
+            throw new Exception(MF::t('core', 'No service named "{name}".', array(
                 '{name}'=>$name,
             )));
-        $config = $this->_config['components'][$name];
+        $config = $this->_servicesConfig[$name];
         if(!isset($config['class']))
-            throw new Exception(MF::t('core', 'Component "{name} has no class defined".', array(
+            throw new Exception(MF::t('core', 'Service "{name} has no class defined".', array(
                 '{name}'=>$name,
             )));
         $className = $config['class'];
         unset($config['class']);
         $instance = new $className($config);
-        $this->_components[$name] = $instance;
+        $this->_services[$name] = $instance;
         return $instance;
+    }
+    
+    public function getRedis()
+    {
+        return $this->getService('redis');
+    }
+    
+    public function getStates()
+    {
+        return $this->getService('states');
+    }
+    
+    public function getSecurityManager()
+    {
+        return $this->getService('securityManager');
     }
     
     public function getDatabases()

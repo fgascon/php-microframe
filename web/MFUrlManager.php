@@ -19,4 +19,9 @@ class MFUrlManager
         }
         return ltrim($pathInfo, '/');
     }
+    
+    public function createUrl($route, $params=array())
+    {
+        return '/'.$route;
+    }
 }

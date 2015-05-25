@@ -7,6 +7,19 @@ class MFWebApp extends MFApp
     private $_httpRequest;
     private $_urlManager;
     
+    public function __construct($config)
+    {
+        parent::__construct($config);
+        $this->_servicesConfig = MFArrayUtil::merge(array(
+            'session'=>array(
+                'class'=>'MFSessionManager',
+            ),
+            'user'=>array(
+                'class'=>'MFWebUser',
+            ),
+        ), $this->_servicesConfig);
+    }
+    
     public function getController()
     {
         return $this->_controller;

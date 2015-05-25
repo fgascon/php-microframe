@@ -10,4 +10,5 @@ MFAutoloader::register();
 MFAutoloader::import(array(
     MF_PATH.'/core',
     MF_PATH.'/core/helpers',
+    MF_PATH.'/core/stateBackends',
 ));

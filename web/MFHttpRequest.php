@@ -27,7 +27,7 @@ class MFHttpRequest
 
     /**
      * @var array the property values (in name-value pairs) used to initialize the CSRF cookie.
-     * Any property of {@link CHttpCookie} may be initialized.
+     * Any property of {@link MFHttpCookie} may be initialized.
      * This property is effective only when {@link enableCsrfValidation} is true.
      */
     public $csrfCookie;
@@ -717,7 +717,7 @@ class MFHttpRequest
 
     /**
      * Returns the cookie collection.
-     * The result can be used like an associative array. Adding {@link CHttpCookie} objects
+     * The result can be used like an associative array. Adding {@link MFHttpCookie} objects
      * to the collection will send the cookies to the client; and removing the objects
      * from the collection will delete those cookies on the client.
      * @return CCookieCollection the cookie collection.
@@ -1135,12 +1135,12 @@ class MFHttpRequest
      * Creates a cookie with a randomly generated CSRF token.
      * Initial values specified in {@link csrfCookie} will be applied
      * to the generated cookie.
-     * @return CHttpCookie the generated cookie
+     * @return MFHttpCookie the generated cookie
      * @see enableCsrfValidation
      */
     protected function createCsrfCookie()
     {
-        $cookie=new CHttpCookie($this->csrfTokenName,sha1(uniqid(mt_rand(),true)));
+        $cookie=new MFHttpCookie($this->csrfTokenName,sha1(uniqid(mt_rand(),true)));
         if(is_array($this->csrfCookie))
         {
             foreach($this->csrfCookie as $name=>$value)

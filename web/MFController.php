@@ -64,5 +64,10 @@ abstract class MFController
             array('{action}'=>$actionID)));
     }
     
+    public function redirect($url, $terminate=true, $statusCode=302)
+    {
+        MF::app()->httpRequest->redirect($url, $terminate, $statusCode);
+    }
+    
     abstract protected function processOutput($output);
 }

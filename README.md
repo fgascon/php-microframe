@@ -22,8 +22,13 @@ require_once(dirname(__FILE__).'/microframe/load_web.php');
 <?php
 
 return array(
+    'include'=>array(
+        'services/',
+    ),
 	'urls'=>array(
 		'/'=>'main/index',
+		'login'=>'auth/login',
+		'logout'=>'auth/logout',
 	),
 	'databases'=>array(
 		'default'=>array(
@@ -32,6 +37,14 @@ return array(
 			'password'=>'mypassword',
 		),
 	),
+    'services'=>array(
+        'states'=>array(
+            'type'=>'redis',
+        ),
+        'redis'=>array(
+        	'socket'=>'/tmp/redis.sock',
+        ),
+    ),
 );
 
 ```
@@ -54,3 +67,7 @@ class MainController extends MFJsonController
 }
 
 ```
+
+##Aknoledgement
+
+A lot of code is based on parts of [Yii Framework](http://www.yiiframework.com/).
