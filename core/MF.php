@@ -26,12 +26,11 @@ class MF
     
     public static function trace($msg, $category='application')
     {
-        
+        self::log($msg, 'debug', $category);
     }
     
 	public static function log($msg, $level='info', $category='application')
 	{
-		
+		self::$app->getLogger()->log($level, $msg);
 	}
-    
 }

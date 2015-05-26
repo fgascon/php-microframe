@@ -4,7 +4,8 @@
     "type": "library",
     "require": {
         "php": ">=5.3.3",
-        "swiftmailer/swiftmailer": "^5.4"
+        "swiftmailer/swiftmailer": "^5.4",
+        "monolog/monolog": "^1.13"
     },
     "autoload": {
         "files": ["include.php"]

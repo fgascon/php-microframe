@@ -21,6 +21,9 @@ class MFApp extends MFComponent
         $this->_servicesConfig = isset($config['services']) ? $config['services'] : array();
         if(!isset($this->_servicesConfig['user']))
         $this->_servicesConfig = MFArrayUtil::merge(array(
+            'logger'=>array(
+                'class'=>'MFLogger',
+            ),
             'redis'=>array(
                 'class'=>'MFRedisConnection',
             ),
@@ -68,6 +71,11 @@ class MFApp extends MFComponent
         $instance = new $className($config);
         $this->_services[$name] = $instance;
         return $instance;
+    }
+    
+    public function getLogger()
+    {
+        return $this->getService('logger');
     }
     
     public function getRedis()
