@@ -19,6 +19,7 @@ MFAutoloader::import(array(
     MF_PATH.'/web/auth',
     MF_PATH.'/db',
     MF_PATH.'/db/schema',
+    MF_PATH.'/db/schema/mysql',
     MF_PATH.'/mail',
     APP_PATH.'/controllers',
     APP_PATH.'/models',

@@ -248,16 +248,16 @@ class MFDbConnection extends MFComponent
 	 * @since 1.1.6
 	 */
 	public $driverMap=array(
-		'cubrid'=>'CCubridSchema',  // CUBRID
-		'pgsql'=>'CPgsqlSchema',    // PostgreSQL
-		'mysqli'=>'CMysqlSchema',   // MySQL
-		'mysql'=>'CMysqlSchema',    // MySQL,MariaDB
-		'sqlite'=>'CSqliteSchema',  // sqlite 3
-		'sqlite2'=>'CSqliteSchema', // sqlite 2
-		'mssql'=>'CMssqlSchema',    // Mssql driver on windows hosts
-		'dblib'=>'CMssqlSchema',    // dblib drivers on linux (and maybe others os) hosts
-		'sqlsrv'=>'CMssqlSchema',   // Mssql
-		'oci'=>'COciSchema',        // Oracle driver
+		'cubrid'=>'MFCubridSchema',  // CUBRID
+		'pgsql'=>'MFPgsqlSchema',    // PostgreSQL
+		'mysqli'=>'MFMysqlSchema',   // MySQL
+		'mysql'=>'MFMysqlSchema',    // MySQL,MariaDB
+		'sqlite'=>'MFSqliteSchema',  // sqlite 3
+		'sqlite2'=>'MFSqliteSchema', // sqlite 2
+		'mssql'=>'MFMssqlSchema',    // Mssql driver on windows hosts
+		'dblib'=>'MFMssqlSchema',    // dblib drivers on linux (and maybe others os) hosts
+		'sqlsrv'=>'MFMssqlSchema',   // Mssql
+		'oci'=>'MFOciSchema',        // Oracle driver
 	);
 
 	/**
