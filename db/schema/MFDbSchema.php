@@ -22,7 +22,7 @@
  * @package system.db.schema
  * @since 1.0
  */
-abstract class MFDbSchema extends CComponent
+abstract class MFDbSchema extends MFComponent
 {
 	/**
 	 * @var array the abstract column types mapped to physical column types.

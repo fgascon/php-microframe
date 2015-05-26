@@ -29,7 +29,7 @@
  * @package system.db.schema
  * @since 1.0
  */
-class MFDbTableSchema extends CComponent
+class MFDbTableSchema extends MFComponent
 {
 	/**
 	 * @var string name of this table.

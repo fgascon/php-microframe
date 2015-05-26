@@ -23,7 +23,7 @@
  * @package system.db.schema
  * @since 1.0
  */
-class MFDbCriteria extends CComponent
+class MFDbCriteria extends MFComponent
 {
 	const PARAM_PREFIX=':ycp';
 	/**

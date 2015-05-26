@@ -18,7 +18,7 @@
  * @package system.db.schema
  * @since 1.0
  */
-class MFDbCommandBuilder extends CComponent
+class MFDbCommandBuilder extends MFComponent
 {
 	const PARAM_PREFIX=':yp';
 

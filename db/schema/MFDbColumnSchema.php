@@ -15,7 +15,7 @@
  * @package system.db.schema
  * @since 1.0
  */
-class MFDbColumnSchema extends CComponent
+class MFDbColumnSchema extends MFComponent
 {
 	/**
 	 * @var string name of this column (without quotes).

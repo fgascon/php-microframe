@@ -24,7 +24,7 @@
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @package system.db.schema
  */
-class MFDbExpression extends CComponent
+class MFDbExpression extends MFComponent
 {
 	/**
 	 * @var string the DB expression
