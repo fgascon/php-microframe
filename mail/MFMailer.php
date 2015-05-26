@@ -24,6 +24,7 @@ class MFMailer extends MFService
             $transport->setPassword($this->password);
         if($this->encryption)
             $transport->setEncryption($this->encryption);
+        $transport->start();
         $this->_transport = $transport;
     }
     
