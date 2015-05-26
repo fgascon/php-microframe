@@ -22,6 +22,11 @@ class MFAction
         return $this->_id;
     }
     
+    public function getUniqueId()
+    {
+        return $this->_controller->getId().'/'.$this->_id;
+    }
+    
     public function run()
     {
         $methodName = 'action'.$this->getId();

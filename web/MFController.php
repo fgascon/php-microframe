@@ -11,6 +11,11 @@ abstract class MFController
         $this->_id = $id;
     }
     
+    public function getId()
+    {
+        return $this->_id;
+    }
+    
     public function getAction()
     {
         return $this->_action;
