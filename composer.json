@@ -1,0 +1,19 @@
+{
+    "name": "fgascon/microframe",
+    "description": "Micro PHP M[V]C Framework",
+    "type": "library",
+    "require": {
+        "php": ">=5.3.3",
+        "swiftmailer/swiftmailer": "^5.4"
+    },
+    "autoload": {
+        "files": ["include.php"]
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Frederic Gascon",
+            "email": "frederic.gascon@gmail.com"
+        }
+    ]
+}

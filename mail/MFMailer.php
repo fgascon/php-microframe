@@ -5,7 +5,6 @@ class MFMailer extends MFService
     
     private $_transport;
     
-    public $swiftPath;
     public $host = 'localhost';
     public $port = 25;
     public $username;
@@ -14,9 +13,6 @@ class MFMailer extends MFService
     
     protected function init()
     {
-        if($this->swiftPath)
-            require_once($this->swiftPath);
-        
         $transport = Swift_SmtpTransport::newInstance($this->host, $this->port);
         if($this->username)
             $transport->setUsername($this->username);

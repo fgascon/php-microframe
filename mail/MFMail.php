@@ -7,7 +7,6 @@ class MFMail extends MFComponent
     
     public function __construct($config=null)
     {
-        MF::app()->mailer;
         $this->_message = Swift_Message::newInstance();
         if(is_array($config))
         {

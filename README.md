@@ -68,6 +68,6 @@ class MainController extends MFJsonController
 
 ```
 
-##Aknoledgement
+##Acknowledgement
 
 A lot of code is based on parts of [Yii Framework](http://www.yiiframework.com/).
