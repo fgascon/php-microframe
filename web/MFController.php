@@ -28,10 +28,18 @@ abstract class MFController
     
     public function run($actionID)
     {
-        if(($action = $this->createAction($actionID)) !== null)
-            $this->runAction($action);
-        else
-            $this->missingAction($actionID);
+        try
+        {
+            if(($action = $this->createAction($actionID)) !== null)
+                $output = $this->runAction($action);
+            else
+                $output = $this->missingAction($actionID);
+        }
+        catch(Exception $exception)
+        {
+            $output = $this->handleException($exception);
+        }
+        $this->processOutput($output);
     }
     
     public function runAction($action)
@@ -40,10 +48,9 @@ abstract class MFController
         $this->_action = $action;
         $output = $action->runWithParams($this->getActionParams());
         if($output === false)
-            $this->invalidActionParams($action);
-        else
-            $this->processOutput($output);
+            $output = $this->invalidActionParams($action);
         $this->_action = $priorAction;
+        return $output;
     }
     
     public function createAction($actionID)
@@ -75,4 +82,9 @@ abstract class MFController
     }
     
     abstract protected function processOutput($output);
+    
+    protected function handleException($exception)
+    {
+        throw $exception;
+    }
 }
