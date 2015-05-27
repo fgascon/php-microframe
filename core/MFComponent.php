@@ -28,7 +28,7 @@ class MFComponent
             // duplicating getEventHandlers() here for performance
             $name=strtolower($name);
             if(!isset($this->_e[$name]))
-                $this->_e[$name]=new CList;
+                $this->_e[$name]=new MFList;
             return $this->_e[$name];
         }
         throw new Exception(MF::t('core','Property "{class}.{property}" is not defined.',
@@ -59,7 +59,7 @@ class MFComponent
             // duplicating getEventHandlers() here for performance
             $name=strtolower($name);
             if(!isset($this->_e[$name]))
-                $this->_e[$name]=new CList;
+                $this->_e[$name]=new MFList;
             return $this->_e[$name]->add($value);
         }
         if(method_exists($this,'get'.$name))
@@ -193,7 +193,7 @@ class MFComponent
     /**
      * Returns the list of attached event handlers for an event.
      * @param string $name the event name
-     * @return CList list of attached event handlers for the event
+     * @return MFList list of attached event handlers for the event
      * @throws Exception if the event is not defined
      */
     public function getEventHandlers($name)
@@ -202,7 +202,7 @@ class MFComponent
         {
             $name=strtolower($name);
             if(!isset($this->_e[$name]))
-                $this->_e[$name]=new CList;
+                $this->_e[$name]=new MFList;
             return $this->_e[$name];
         }
         else
