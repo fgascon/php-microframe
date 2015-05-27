@@ -268,7 +268,7 @@ class MFComponent
      * This method represents the happening of an event. It invokes
      * all attached handlers for the event.
      * @param string $name the event name
-     * @param CEvent $event the event parameter
+     * @param MFEvent $event the event parameter
      * @throws Exception if the event is undefined or an event handler is invalid.
      */
     public function raiseEvent($name,$event)
@@ -301,7 +301,7 @@ class MFComponent
                     throw new Exception(MF::t('core','Event "{class}.{event}" is attached with an invalid handler "{handler}".',
                         array('{class}'=>get_class($this), '{event}'=>$name, '{handler}'=>gettype($handler))));
                 // stop further handling if param.handled is set true
-                if(($event instanceof CEvent) && $event->handled)
+                if(($event instanceof MFEvent) && $event->handled)
                     return;
             }
         }
