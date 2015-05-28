@@ -1,12 +1,18 @@
 <?php
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 abstract class MFJsonController extends MFController
 {
     
-    protected function processOutput($output)
+    protected function createResponse()
     {
-        header('Content-Type: application/json');
-        echo json_encode($output);
+        return new JsonResponse();
+    }
+    
+    public function setOutput($output)
+    {
+        $this->getResponse()->setData($output);
     }
     
     protected function handleException($exception)
@@ -19,8 +25,12 @@ abstract class MFJsonController extends MFController
         {
             $error['stack'] = $exception->getTrace();
         }
-        return array(
+        $output = array(
             'error'=>$error,
         );
+        if($exception instanceof MFHttpException)
+            return new JsonResponse($output, $exception->statusCode);
+        else
+            return new JsonResponse($output);
     }
 }

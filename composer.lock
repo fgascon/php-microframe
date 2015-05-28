@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "16d4d6a46a731a12d99de48544daad35",
+    "hash": "09d79a865aec67f513d5add2b45a0220",
     "packages": [
         {
             "name": "monolog/monolog",
@@ -168,6 +168,129 @@
                 "mailer"
             ],
             "time": "2015-03-14 06:06:39"
+        },
+        {
+            "name": "symfony/http-foundation",
+            "version": "v2.6.8",
+            "target-dir": "Symfony/Component/HttpFoundation",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/HttpFoundation.git",
+                "reference": "f9b28dcc6d3e50f5568b42dda7292656a9fe8432"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/f9b28dcc6d3e50f5568b42dda7292656a9fe8432",
+                "reference": "f9b28dcc6d3e50f5568b42dda7292656a9fe8432",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "symfony/expression-language": "~2.4",
+                "symfony/phpunit-bridge": "~2.7"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\HttpFoundation\\": ""
+                },
+                "classmap": [
+                    "Symfony/Component/HttpFoundation/Resources/stubs"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony HttpFoundation Component",
+            "homepage": "https://symfony.com",
+            "time": "2015-05-22 14:53:08"
+        },
+        {
+            "name": "symfony/routing",
+            "version": "v2.6.8",
+            "target-dir": "Symfony/Component/Routing",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Routing.git",
+                "reference": "dc9df18a1cfe87de65e270e8f01407ca6d7c39cb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Routing/zipball/dc9df18a1cfe87de65e270e8f01407ca6d7c39cb",
+                "reference": "dc9df18a1cfe87de65e270e8f01407ca6d7c39cb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "doctrine/annotations": "~1.0",
+                "doctrine/common": "~2.2",
+                "psr/log": "~1.0",
+                "symfony/config": "~2.2",
+                "symfony/expression-language": "~2.4",
+                "symfony/http-foundation": "~2.3",
+                "symfony/phpunit-bridge": "~2.7",
+                "symfony/yaml": "~2.0,>=2.0.5"
+            },
+            "suggest": {
+                "doctrine/annotations": "For using the annotation loader",
+                "symfony/config": "For using the all-in-one router or any loader",
+                "symfony/expression-language": "For using expression matching",
+                "symfony/yaml": "For using the YAML loader"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Routing\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Routing Component",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "router",
+                "routing",
+                "uri",
+                "url"
+            ],
+            "time": "2015-05-15 13:32:45"
         }
     ],
     "packages-dev": [],

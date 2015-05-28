@@ -1,11 +1,19 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\Matcher\UrlMatcher;
+
 class MFWebApp extends MFApp
 {
     
     private $_controller;
-    private $_httpRequest;
-    private $_urlManager;
+    private $_request;
+    private $_routes;
+    private $_urlMatcher;
     
     public function __construct($config)
     {
@@ -25,27 +33,91 @@ class MFWebApp extends MFApp
         return $this->_controller;
     }
     
-    public function getHttpRequest()
+    public function getRequest()
     {
-        if(!$this->_httpRequest)
-            $this->_httpRequest = new MFHttpRequest();
-        return $this->_httpRequest;
+        if(!$this->_request)
+            $this->_request = Request::createFromGlobals();
+        return $this->_request;
     }
     
-    public function getUrlManager()
+    public function getRoutes()
     {
-        if(!$this->_urlManager)
+        if(!$this->_routes)
         {
             $config = $this->_config;
-            $this->_urlManager = new MFUrlManager(isset($config['urls']) ? $config['urls'] : array());
+            $urls = isset($config['urls']) ? $config['urls'] : array();
+            $routes = new RouteCollection();
+            foreach($urls as $pattern=>$routeConfig)
+            {
+                $route = new Route($pattern);
+                if(is_string($routeConfig))
+                    $routes->add($routeConfig, $route);
+                else if(is_array($routeConfig) && isset($routeConfig[0]))
+                {
+                    $params = isset($routeConfig['defaultParams']);
+                    $routeName = $routeConfig[0];
+                    unset($routeConfig[0]);
+                    foreach($routeConfig as $key=>$value)
+                    {
+                        $route->$key = $name;
+                    }
+                    $routes->add($routeName, $route);
+                }
+                else
+                    throw new Exception(MF::t('core','Invalid route configuration for "{pattern}".',array(
+                        '{pattern}'=>"$pattern",
+                    )));
+            }
+            $this->_routes = $routes;
         }
-        return $this->_urlManager;
+        return $this->_routes;
+    }
+    
+    public function getUrlMatcher()
+    {
+        if(!$this->_urlMatcher)
+        {
+            $context = new RequestContext();
+            $context->fromRequest($this->getRequest());
+            $this->_urlMatcher = new UrlMatcher($this->getRoutes(), $context);
+        }
+        return $this->_urlMatcher;
+    }
+    
+    protected function resolveRoute()
+    {
+        $urlMatcher = $this->getUrlMatcher();
+        try
+        {
+            $params = $urlMatcher->matchRequest($this->getRequest());
+            $route = $params['_route'];
+            unset($params['_route']);
+            foreach($params as $key=>$value)
+            {
+                $_GET[$key] = $value;
+                if(!isset($_POST[$key]))
+                    $_REQUEST[$key] = $value;
+            }
+            return $route;
+        }
+        catch(Routing\Exception\ResourceNotFoundException $exception)
+        {
+            throw new MFHttpException(404, "Not Found");
+        }
     }
     
     public function run()
     {
-        $route = $this->getUrlManager()->detectRoute($this->getHttpRequest());
-        $this->runController($route);
+        try
+        {
+            $route = $this->resolveRoute();
+            $response = $this->runController($route);
+        }
+        catch(Exception $exception)
+        {
+            $response = $this->handleException($exception);
+        }
+        $response->send();
     }
     
     public function runController($route)
@@ -55,9 +127,10 @@ class MFWebApp extends MFApp
             list($controller , $actionID) = $ca;
             $oldController = $this->_controller;
             $this->_controller = $controller;
-            //$controller->init();
-            $controller->run($actionID);
+            $controller->init();
+            $response = $controller->run($actionID);
             $this->_controller = $oldController;
+            return $response;
         }
         else
             throw new MFHttpException(404, MF::t('core','Unable to resolve the request "{route}".',
@@ -94,6 +167,13 @@ class MFWebApp extends MFApp
             return array($controller, $actionID);
         }
         return null;
+    }
+    
+    protected function handleException($exception)
+    {
+        if($exception instanceof MFHttpException)
+            return new Response($exception->getMessage(), $exception->statusCode);
+        throw $exception;
     }
     
     public function displayError($code, $message, $file, $line)

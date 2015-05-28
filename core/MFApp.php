@@ -33,6 +33,9 @@ class MFApp extends MFComponent
             'security'=>array(
                 'class'=>'MFSecurity',
             ),
+            'mail'=>array(
+                'class'=>'MFMailer',
+            ),
         ), $this->_servicesConfig);
         
         unset($config['services']);
@@ -112,7 +115,7 @@ class MFApp extends MFComponent
     {
     }
     
-    public function handleException($exception)
+    public function globalExceptionHandler($exception)
     {
         // disable error capturing to avoid recursive errors
         restore_error_handler();
@@ -162,7 +165,7 @@ class MFApp extends MFComponent
         exit(1);
     }
     
-    public function handleError($code, $message, $file, $line)
+    public function globalErrorHandler($code, $message, $file, $line)
     {
         if($code & error_reporting())
         {
@@ -227,9 +230,9 @@ class MFApp extends MFComponent
     protected function initSystemHandlers()
     {
         if(MF_ENABLE_EXCEPTION_HANDLER)
-            set_exception_handler(array($this, 'handleException'));
+            set_exception_handler(array($this, 'globalExceptionHandler'));
         if(MF_ENABLE_ERROR_HANDLER)
-            set_error_handler(array($this, 'handleError'), error_reporting());
+            set_error_handler(array($this, 'globalErrorHandler'), error_reporting());
     }
     
     public function displayError($code, $message, $file, $line)

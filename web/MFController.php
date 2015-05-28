@@ -1,14 +1,28 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
 abstract class MFController
 {
     
     private $_id;
     private $_action;
+    private $_response;
     
     public function __construct($id)
     {
         $this->_id = $id;
+        $this->_response = $this->createResponse();
+    }
+    
+    protected function createResponse()
+    {
+        return new Response();
+    }
+    
+    public function init()
+    {
     }
     
     public function getId()
@@ -26,20 +40,25 @@ abstract class MFController
         $this->_action = $action;
     }
     
+    public function getResponse()
+    {
+        return $this->_response;
+    }
+    
     public function run($actionID)
     {
         try
         {
             if(($action = $this->createAction($actionID)) !== null)
-                $output = $this->runAction($action);
+                $this->runAction($action, $params);
             else
-                $output = $this->missingAction($actionID);
+                $this->missingAction($actionID);
         }
         catch(Exception $exception)
         {
-            $output = $this->handleException($exception);
+            $this->_response = $this->handleException($exception);
         }
-        $this->processOutput($output);
+        return $this->_response;
     }
     
     public function runAction($action)
@@ -50,7 +69,24 @@ abstract class MFController
         if($output === false)
             $output = $this->invalidActionParams($action);
         $this->_action = $priorAction;
-        return $output;
+        if(is_a($output, 'Symfony\Component\HttpFoundation\Response'))
+        {
+            $this->_response = $output;
+        }
+        else
+        {
+            $this->setOutput($this->processOutput($output));
+        }
+    }
+    
+    public function setOutput($output)
+    {
+        $this->_response->setContent($output);
+    }
+    
+    public function getActionParams()
+    {
+        return $_GET;
     }
     
     public function createAction($actionID)
@@ -58,11 +94,6 @@ abstract class MFController
         if(method_exists($this, 'action'.$actionID) && strcasecmp($actionID, 's')) // we have actions method
             return new MFAction($this, $actionID);
         return null;
-    }
-    
-    public function getActionParams()
-    {
-        return $_GET;
     }
     
     public function invalidActionParams($actionID)
@@ -76,12 +107,15 @@ abstract class MFController
             array('{action}'=>$actionID)));
     }
     
-    public function redirect($url, $terminate=true, $statusCode=302)
+    public function redirect($url, $statusCode=302, $headers=array())
     {
-        MF::app()->httpRequest->redirect($url, $terminate, $statusCode);
+        return new RedirectResponse($url, $statusCode, $headers);
     }
     
-    abstract protected function processOutput($output);
+    protected function processOutput($output)
+    {
+        return $output;
+    }
     
     protected function handleException($exception)
     {
