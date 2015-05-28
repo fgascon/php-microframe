@@ -13,24 +13,59 @@ class MFLogger extends MFService
     const ALERT = 550;
     const EMERGENCY = 600;
     
-    private $_handlers = array();
-    private $_processors = array();
-    private $_logger;
+    private $_channelsConfig = array();
+    private $_channels = array();
+    private $_aliases = array();
     
-    public $channel = 'microframe';
-    
-    public function init()
+    public function getAliases()
     {
-        $this->_logger = new Logger($this->channel, $this->_handlers, $this->_processors);
+        return $this->_aliases;
     }
     
-    public function setHandlers(array $handlers)
+    public function setAliases($aliases)
     {
-        $this->_handlers = $handlers;
+        $this->_aliases = $aliases;
     }
     
-    public function log($level, $message, array $context=array())
+    public function setChannels($channels)
     {
-        $this->_logger->log($level, $message, $context);
+        $this->_channelsConfig = $channels;
+    }
+    
+    public function getChannels()
+    {
+        $channels = array();
+        foreach($this->_channelsConfig as $name=>$config)
+        {
+            $channels[$name] = $this->getChannel($name);
+        }
+        return $channels;
+    }
+    
+    public function getChannel($name='application')
+    {
+        $name = $this->resolveAlias($name);
+        
+        if(isset($this->_channels[$name]))
+            return $this->_channels[$name];
+        
+        $config = isset($this->_channelsConfig[$name]) ? $this->_channelsConfig[$name] : array();
+        $handlers = isset($config['handlers']) ? $config['handlers'] : array();
+        $processors = isset($config['processors']) ? $config['processors'] : array();
+        $logger = new Logger($name, $handlers, $processors);
+        
+        $this->_channels[$name] = $logger;
+        return $logger;
+    }
+    
+    private function resolveAlias($name)
+    {
+        $aliases = $this->_aliases;
+        foreach($aliases as $alias=>$resolveTo)
+        {
+            if(strpos($name, $alias) === 0)
+                return $resolveTo;
+        }
+        return $name;
     }
 }
