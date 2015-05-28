@@ -46,6 +46,21 @@ class MFMail extends MFComponent
             return parent::__call($name, $parameters);
     }
     
+    public function renderView($view, $data=array(), $contentType='text/html')
+    {
+        $viewPath = APP_PATH.'/views/mail/'.$view.'.php';
+        $body = $this->renderViewInternal($viewPath, $data);
+        $this->setBody($body, $contentType);
+    }
+    
+    private function renderViewInternal($__viewPath__, $__data__)
+    {
+        extract($__data__, EXTR_SKIP);
+        ob_start();
+        require($__viewPath__);
+        return ob_get_clean();
+    }
+    
     public function send()
     {
         return MF::app()->mailer->send($this);
