@@ -50,7 +50,7 @@ abstract class MFController
         try
         {
             if(($action = $this->createAction($actionID)) !== null)
-                $this->runAction($action, $params);
+                $this->runAction($action);
             else
                 $this->missingAction($actionID);
         }
