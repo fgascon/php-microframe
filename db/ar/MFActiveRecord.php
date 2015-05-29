@@ -50,11 +50,11 @@ abstract class MFActiveRecord extends MFModel
 	 * By default, this is the 'db' application component.
 	 * @see getDbConnection
 	 */
-	public static $db;
 
 	private static $_models=array();			// class name => model
 	private static $_md=array();				// class name => meta data
 
+	private $_db;
 	private $_new=false;						// whether this instance is new or not
 	private $_attributes=array();				// attribute name => attribute value
 	private $_related=array();					// attribute name => related objects
@@ -632,15 +632,15 @@ abstract class MFActiveRecord extends MFModel
 	 */
 	public function getDbConnection()
 	{
-		if(self::$db!==null)
-			return self::$db;
+		if($this->_db!==null)
+			return $this->_db;
 		else
 		{
-			self::$db=MF::app()->getDatabase($this->databaseName);
-			if(self::$db instanceof MFDbConnection)
-				return self::$db;
+			$this->_db=MF::app()->getDatabase($this->databaseName);
+			if($this->_db instanceof MFDbConnection)
+				return $this->_db;
 			else
-				throw new MFDbException(MF::t('core','Active Record requires a "db" MFDbConnection application component.'));
+				throw new MFDbException(MF::t('core','Active Record requires a valid MFDbConnection.'));
 		}
 	}
 
