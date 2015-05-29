@@ -24,13 +24,13 @@ class MF
         return str_replace(array_keys($params), array_values($params), $message);
     }
     
-    public static function trace($msg, $category='application')
+    public static function trace($msg, $category='application', $context=array())
     {
-        self::log($msg, 'debug', $category);
+        self::log($msg, 'debug', $category, $context);
     }
     
-	public static function log($msg, $level='info', $category='application')
+	public static function log($msg, $level='info', $category='application', $context=array())
 	{
-		self::$app->getLogger()->getChannel($category)->log($level, $msg);
+		self::$app->getLogger()->getChannel($category)->log($level, $msg, $context);
 	}
 }
