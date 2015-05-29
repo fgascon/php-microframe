@@ -26,7 +26,7 @@ class MFMailer extends MFService
     
     public function send($mail)
     {
-        MF::trace("Sending mail to :".$mail->to, 'system.mail.MFMailer');
+        MF::trace("Sending mail to :".$mail->get('To')->toString(), 'system.mail.MFMailer');
         return $this->_transport->send($mail);
     }
 }

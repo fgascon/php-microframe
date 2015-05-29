@@ -33,7 +33,7 @@ class MFApp extends MFComponent
             'security'=>array(
                 'class'=>'MFSecurity',
             ),
-            'mail'=>array(
+            'mailer'=>array(
                 'class'=>'MFMailer',
             ),
         ), $this->_servicesConfig);
