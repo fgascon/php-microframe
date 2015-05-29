@@ -17,6 +17,11 @@ class MFMail extends MFComponent
         }
     }
     
+    public function getMessage()
+    {
+        return $this->_message;
+    }
+    
     public function __get($name)
     {
         $getter = 'get'.$name;
@@ -63,6 +68,6 @@ class MFMail extends MFComponent
     
     public function send()
     {
-        return MF::app()->mailer->send($this);
+        return MF::app()->mailer->send($this->_message);
     }
 }
