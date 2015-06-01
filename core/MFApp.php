@@ -76,6 +76,11 @@ class MFApp extends MFComponent
         return $instance;
     }
     
+    public function getSettings()
+    {
+        return isset($this->_config['settings']) ? $this->_config['settings'] : array();
+    }
+    
     public function getLogger()
     {
         return $this->getService('logger');
