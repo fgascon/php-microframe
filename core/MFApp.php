@@ -96,9 +96,9 @@ class MFApp extends MFComponent
         return $this->getService('states');
     }
     
-    public function getSecurityManager()
+    public function getSecurity()
     {
-        return $this->getService('securityManager');
+        return $this->getService('security');
     }
     
     public function getDatabases()
