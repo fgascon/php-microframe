@@ -92,6 +92,12 @@ class MFWebApp extends MFApp
             $params = $urlMatcher->matchRequest($this->getRequest());
             $route = $params['_route'];
             unset($params['_route']);
+            $replaces = array();
+            foreach($params as $key=>$value)
+            {
+                $replaces['{'.$key.'}'] = $value;
+            }
+            $route = strtr($route, $replaces);
             foreach($params as $key=>$value)
             {
                 $_GET[$key] = $value;
