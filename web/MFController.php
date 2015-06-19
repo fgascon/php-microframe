@@ -3,7 +3,7 @@
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-abstract class MFController
+abstract class MFController extends MFComponent
 {
     
     private $_id;
@@ -68,7 +68,6 @@ abstract class MFController
         $output = $action->runWithParams($this->getActionParams());
         if($output === false)
             $output = $this->invalidActionParams($action);
-        $this->_action = $priorAction;
         if(is_a($output, 'Symfony\Component\HttpFoundation\Response'))
         {
             $this->_response = $output;
@@ -77,6 +76,7 @@ abstract class MFController
         {
             $this->setOutput($this->processOutput($output));
         }
+        $this->_action = $priorAction;
     }
     
     public function setOutput($output)

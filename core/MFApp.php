@@ -8,6 +8,8 @@ class MFApp extends MFComponent
     protected $_servicesConfig;
     protected $_services = array();
     
+    public $charset = 'UTF-8';
+    
     public function __construct($config)
     {
         MF::setApp($this);
@@ -46,6 +48,8 @@ class MFApp extends MFComponent
                 return $path[0] === '/' ? $path : APP_PATH.'/'.$path;
             }, $config['include']));
         }
+        if(isset($config['charset']))
+            $this->charset = $config['charset'];
     }
     
     public function __get($name)
@@ -54,6 +58,16 @@ class MFApp extends MFComponent
             return $this->getService($name);
         else
             return parent::__get($name);
+    }
+    
+    public function getCharset()
+    {
+        return $this->_charset;
+    }
+    
+    public function setCharset($charset)
+    {
+        $this->_charset = $charset;
     }
     
     public function getService($name)
