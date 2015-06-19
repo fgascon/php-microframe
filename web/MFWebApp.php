@@ -59,7 +59,10 @@ class MFWebApp extends MFApp
                     unset($routeConfig[0]);
                     foreach($routeConfig as $key=>$value)
                     {
-                        $route->$key = $name;
+                        if(method_exists($route, 'set'.$key))
+                            call_user_func(array($route, 'set'.$key), $value);
+                        else
+                            $route->$key = $value;
                     }
                     $routes->add($routeName, $route);
                 }
